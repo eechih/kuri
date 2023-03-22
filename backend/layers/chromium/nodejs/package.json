@@ -1,0 +1,17 @@
+{
+  "name": "nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@sparticuz/chromium": "^111.0.0",
+    "puppeteer-autoscroll-down": "^1.1.1",
+    "puppeteer-core": "^19.7.5"
+  }
+}

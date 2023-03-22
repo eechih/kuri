@@ -22,15 +22,21 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+ARG API_URL
+ENV API_URL=${API_URL}
+RUN echo "API_URL = ${API_URL}"
+
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
+# If using yarn comment out above and use below instead
 # RUN yarn build
 
 # If using npm comment out above and use below instead
 RUN npm run build
+
 
 # Production image, copy all the files and run next
 FROM base AS runner

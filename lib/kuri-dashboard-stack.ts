@@ -61,20 +61,23 @@ export default class KuriDashboardStack extends cdk.Stack {
       }
     )
 
-    const environment: { [key: string]: string } = {}
+    const imageBuildArgs: { [key: string]: string } = {}
     if (apiUrl) {
-      environment.API_URL = apiUrl
+      new cdk.CfnOutput(this, 'apiUrl', { value: apiUrl })
+      imageBuildArgs.API_URL = apiUrl
     }
 
     taskDefinition.addContainer('Container', {
       image: ecs.ContainerImage.fromAsset(
-        path.resolve(__dirname, '..', 'dashboard')
+        path.resolve(__dirname, '..', 'dashboard'),
+        {
+          buildArgs: imageBuildArgs,
+        }
       ),
       logging: logging,
       portMappings: [{ containerPort: 3000 }],
       cpu: 256,
       memoryLimitMiB: 512,
-      environment: environment,
     })
 
     new ecsp.ApplicationLoadBalancedFargateService(this, 'FargateService', {

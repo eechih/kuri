@@ -9,6 +9,7 @@
     "lint": "next lint",
     "docker:build": "docker build -t kuri-dashboard .",
     "docker:run": "docker run -p 3000:3000 kuri-dashboard",
+    "synth": "cd .. && npm run cdk synth KuriDashboardStack",
     "deploy": "cd .. && npm run cdk deploy KuriDashboardStack"
   },
   "dependencies": {
