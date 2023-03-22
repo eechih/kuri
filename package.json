@@ -10,7 +10,8 @@
     "test": "jest",
     "cdk": "cdk",
     "prettier": "prettier .",
-    "format": "npm run prettier -- --write"
+    "format": "npm run prettier -- --write",
+    "deploy": "npm run cdk deploy --all"
   },
   "devDependencies": {
     "@types/jest": "^29.4.0",
