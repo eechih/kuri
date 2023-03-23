@@ -1,20 +1,20 @@
 type Product = {
-  location: string
-  statusDate: string
-  option: string[][]
-  creationTime: string
-  publishing: boolean
-  status: number
-  publishedProductId: string
-  name: string
-  cost: number
-  publishedPostId: string
-  messageId: string
   userId: string
-  images: string[]
-  description: string
-  price: number
   productId: string
+  name?: string
+  price?: number
+  cost?: number
+  option?: string[][]
+  description?: string
+  location?: string
+  images?: string[]
+  statusDate?: string // ISO 8601
+  status?: number
+  creationTime: string // ISO 8601
+  publishing?: boolean
+  publishedProductId?: string // Poduct ID for Buy+1
+  publishedPostId?: string // Post ID for Facebook
+  publishLog?: string
 }
 
 export default Product

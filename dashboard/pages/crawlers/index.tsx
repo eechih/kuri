@@ -27,10 +27,6 @@ export default function Index() {
   const [loading, setLoading] = React.useState<boolean>()
   const [loadedTime, setLoadedTime] = React.useState<string>()
 
-  React.useEffect(() => {
-    listCrawlers()
-  }, [])
-
   const listCrawlers = async () => {
     console.log('listCrawlers')
     setLoading(true)
@@ -41,7 +37,7 @@ export default function Index() {
       const crawlers = res.data.items
       if (crawlers) {
         setCrawlers(crawlers)
-        setLoadedTime(moment().format('cc'))
+        setLoadedTime(moment().format())
       }
     } catch (err) {
       if (isAxiosError(err)) {
@@ -53,6 +49,10 @@ export default function Index() {
     }
     setLoading(false)
   }
+
+  React.useEffect(() => {
+    listCrawlers()
+  }, [])
 
   const createCrawler = async () => {
     console.log('createCrawler')

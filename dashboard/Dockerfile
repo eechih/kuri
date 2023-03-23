@@ -24,7 +24,6 @@ COPY . .
 
 ARG API_URL
 ENV API_URL=${API_URL}
-RUN echo "API_URL = ${API_URL}"
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
