@@ -14,7 +14,7 @@ const app = new cdk.App()
 
 new KuriStack(app, 'KuriStack')
 
-const auth = new KuriAuthStack(app, 'KuriAuthStack')
+const auth = new KuriAuthStack(app, 'KuriAuthStack', { env, domain })
 
 const backend = new KuriBackendStack(app, 'KuriBackendStack', { env, domain })
 
