@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import Product from 'models/product'
+import Product from '@/src/models/product'
 import products from 'samples/products.json'
 
 type Data = {

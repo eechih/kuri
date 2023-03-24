@@ -12,10 +12,10 @@ import Stack from '@mui/material/Stack'
 import moment from 'moment'
 import Image from 'next/image'
 
-import TextAccordion from 'components/TextAccordion'
-import Post from 'models/post'
+import TextAccordion from '@/src/components/TextAccordion'
+import Post from '@/src/models/post'
 import React from 'react'
-import { convertToProduct } from '../../utils/converters'
+import { convertToProduct } from '../../src/utils/converters'
 
 export interface OnCreateProductButtonClickFunc {
   (post: Post): void

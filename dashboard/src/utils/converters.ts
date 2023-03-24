@@ -1,5 +1,5 @@
-import Post from 'models/post'
-import Product from 'models/product'
+import Post from '@/src/models/post'
+import Product from '@/src/models/product'
 import moment from 'moment'
 
 export const convertToProduct = (props: { post: Post }): Product => {

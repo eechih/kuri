@@ -4,8 +4,8 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 
-import { useLoadingReducer } from 'hooks'
-import Product from 'models/product'
+import { useLoadingReducer } from '@/src/hooks'
+import Product from '@/src/models/product'
 
 interface ProductPublisherDialogProps {
   open: boolean

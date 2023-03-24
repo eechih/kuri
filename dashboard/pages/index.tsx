@@ -1,4 +1,4 @@
-import styles from '@/styles/Home.module.css'
+import Layout from '@/src/components/Layout'
 import Head from 'next/head'
 import Link from 'next/link'
 
@@ -11,8 +11,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
-        <h1 className="title"></h1>
+      <Layout>
         <div>
           <Link href="/crawlers">爬蟲管理</Link>
         </div>
@@ -22,7 +21,7 @@ export default function Home() {
         <div>
           <Link href="/products">商品管理</Link>
         </div>
-      </main>
+      </Layout>
     </>
   )
 }

@@ -2,7 +2,7 @@
 import moment from 'moment'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import Crawler from 'models/crawler'
+import Crawler from '@/src/models/crawler'
 import crawlers from 'samples/crawlers.json'
 
 type Error = {

@@ -8,10 +8,10 @@ import moment from 'moment'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
-import Breadcrumbs from '../../components/Breadcrumbs'
-import Layout from '../../components/Layout'
-import RefreshIconButton from '../../components/RefreshIconButton'
-import Crawler from '../../models/crawler'
+import Breadcrumbs from '../../src/components/Breadcrumbs'
+import Layout from '../../src/components/Layout'
+import RefreshIconButton from '../../src/components/RefreshIconButton'
+import Crawler from '../../src/models/crawler'
 import StateLabel from './StateLabel'
 
 export default function Index() {

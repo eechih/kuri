@@ -1,18 +1,18 @@
+import Layout from '@/src/components/Layout'
+import Post from '@/src/models/post'
 import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
 import Stack from '@mui/material/Stack'
 import { styled } from '@mui/material/styles'
 import axios, { AxiosError, isAxiosError } from 'axios'
-import Layout from 'components/Layout'
 import { compare } from 'fast-json-patch'
-import Post from 'models/post'
 import moment from 'moment'
 import * as R from 'ramda'
 import { useEffect, useState } from 'react'
 
-import Breadcrumbs from 'components/Breadcrumbs'
-import { useLoadingReducer } from 'hooks'
-import { convertToProduct } from 'utils/converters'
+import Breadcrumbs from '@/src/components/Breadcrumbs'
+import { useLoadingReducer } from '@/src/hooks'
+import { convertToProduct } from '@/src/utils/converters'
 import PostFormDialog from './PostFormDialog'
 import PostItem, {
   OnCreateProductButtonClickFunc,

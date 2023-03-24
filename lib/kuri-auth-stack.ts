@@ -6,13 +6,13 @@ import * as targets from 'aws-cdk-lib/aws-route53-targets'
 import { Construct } from 'constructs'
 
 const OAUTH_SCOPES: cognito.OAuthScope[] = [
-  cognito.OAuthScope.PHONE,
-  cognito.OAuthScope.EMAIL,
+  // cognito.OAuthScope.PHONE,
+  // cognito.OAuthScope.EMAIL,
   cognito.OAuthScope.OPENID,
-  cognito.OAuthScope.PROFILE,
+  // cognito.OAuthScope.PROFILE,
 ]
 
-const CALLBACK_URL = 'http://localhost:3000/auth'
+const CALLBACK_URL = 'http://localhost:3000/api/auth/callback/cognito'
 
 interface KuriAuthProps extends cdk.StackProps {
   readonly domain: string
@@ -65,6 +65,7 @@ export default class KuriAuthStack extends cdk.Stack {
         callbackUrls: [CALLBACK_URL],
         scopes: OAUTH_SCOPES,
       },
+      generateSecret: true,
     })
 
     new cdk.CfnOutput(this, 'userPoolClientId', {
