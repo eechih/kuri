@@ -39,7 +39,7 @@ export default class KuriBackendStack extends cdk.Stack {
 
     const api = new Api(this, 'Api', {
       domain: domain,
-      subdomain: 'api2',
+      subdomain: 'api',
       routeHandlers: [
         { routePath: '/crawlers', handler: crawler.handler },
         { routePath: '/groups', handler: group.handler },

@@ -20,7 +20,7 @@ export default class KuriDashboardStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: KuriDashboardStackProps) {
     super(scope, id, props)
 
-    const { domain, subdomain = 'dsahboard', apiUrl } = props
+    const { domain, subdomain = 'dashboard', apiUrl } = props
 
     const domainName = subdomain + '.' + domain
 
