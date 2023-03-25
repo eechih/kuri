@@ -7,7 +7,9 @@ import { styled } from '@mui/material/styles'
 import axios, { AxiosError, isAxiosError } from 'axios'
 import { compare } from 'fast-json-patch'
 import moment from 'moment'
-import * as R from 'ramda'
+import { useRouter } from 'next/router'
+import { ParsedUrlQuery } from 'querystring'
+import { isEmpty } from 'ramda'
 import { useEffect, useState } from 'react'
 
 import Breadcrumbs from '@/src/components/Breadcrumbs'
@@ -35,15 +37,30 @@ type Query = {
 }
 
 export default function Index() {
-  const [query, setQuery] = useState<Query>({ limit: 10, order: 'desc' })
+  const router = useRouter()
   const [loadingState, setLoadingState] = useLoadingReducer()
   const [posts, setPosts] = useState<Post[]>([])
   const [postToEdit, setPostToEdit] = useState<Post | null>(null)
   const [postToReview, setPostToReview] = useState<Post | null>(null)
 
   useEffect(() => {
-    async function listPosts() {
-      console.log('listPosts')
+    if (router.isReady) {
+      const { limit, order } = router.query
+      if (!limit || !order) {
+        router.push({
+          query: {
+            ...router.query,
+            limit: limit ?? '10',
+            order: order ?? 'desc',
+          },
+        })
+      }
+    }
+  }, [router])
+
+  useEffect(() => {
+    async function listPosts(query: ParsedUrlQuery) {
+      console.log('listPosts', query)
       try {
         setLoadingState({ loading: true, error: null })
         const res = await axios.get('/api/posts', { params: query })
@@ -61,8 +78,8 @@ export default function Index() {
       }
     }
 
-    listPosts()
-  }, [query, setLoadingState])
+    if (!isEmpty(router.query)) listPosts(router.query)
+  }, [router.query, setLoadingState])
 
   const createProductFromPost = async (post: Post) => {
     console.log('createProductFromPost', post)
@@ -124,7 +141,7 @@ export default function Index() {
       if (post) {
         const patches = compare(post, postToUpdate)
         console.log('patches', patches)
-        if (!R.isEmpty(patches)) {
+        if (!isEmpty(patches)) {
           const res = await axios.patch(`/api/posts/${postId}`, patches)
           const updatedPost = res.data
           setPosts(

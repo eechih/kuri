@@ -14,8 +14,10 @@ import TableRow from '@mui/material/TableRow'
 import Typography from '@mui/material/Typography'
 import axios, { AxiosError, isAxiosError } from 'axios'
 import { compare } from 'fast-json-patch'
-import moment, { Moment } from 'moment'
+import moment from 'moment'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { ParsedUrlQuery } from 'querystring'
 import { find, isEmpty, propEq, reject } from 'ramda'
 import { useEffect, useState } from 'react'
 
@@ -27,14 +29,8 @@ import Product from '@/src/models/product'
 import ProductFormDialog from './ProductFormDialog'
 import ProductPublisherDialog from './ProductPublisherDialog'
 
-type Query = {
-  limit: number
-  order: string
-  refreshTime?: Moment
-}
-
 export default function Index() {
-  const [query, setQuery] = useState<Query>({ limit: 20, order: 'desc' })
+  const router = useRouter()
   const [loadingState, setLoadingState] = useLoadingReducer()
   const [products, setProducts] = useState<Product[]>([])
   const [productToEdit, setProductToEdit] = useState<Product | null>(null)
@@ -44,8 +40,23 @@ export default function Index() {
   )
 
   useEffect(() => {
-    async function listProducts() {
-      console.log('listProducts')
+    if (router.isReady) {
+      const { limit, order } = router.query
+      if (!limit || !order) {
+        router.push({
+          query: {
+            ...router.query,
+            limit: limit ?? '10',
+            order: order ?? 'desc',
+          },
+        })
+      }
+    }
+  }, [router])
+
+  useEffect(() => {
+    async function listProducts(query: ParsedUrlQuery) {
+      console.log('listProducts', query)
       try {
         setLoadingState({ loading: true, error: null })
         const res = await axios.get('/api/products', { params: query })
@@ -63,12 +74,14 @@ export default function Index() {
       }
     }
 
-    listProducts()
-  }, [query, setLoadingState])
+    if (!isEmpty(router.query)) listProducts(router.query)
+  }, [router.query, setLoadingState])
 
   const handleRefreshButtonClick = async () => {
     console.log('handleRefreshButtonClick')
-    setQuery({ ...query, refreshTime: moment() })
+    router.push({
+      query: { ...router.query, timestamp: moment().toISOString() },
+    })
   }
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,7 +99,7 @@ export default function Index() {
     console.log('publishProduct', productId)
     try {
       await axios.put(`/api/products/${productId}/publish`, undefined, {
-        params: { phpsessId: 'tbo311ajis0n5p9ni2re6l1t26' },
+        params: { phpsessId: 'hj0rbuamo1i5ojfunkfcoej3k5' },
         timeout: 60000, // 60 seconds
       })
 
@@ -141,9 +154,12 @@ export default function Index() {
           justifyContent="space-between"
           sx={{ pt: 2, pb: 2 }}
         >
-          <Stack>
+          <Stack direction="row" spacing={1}>
             <Typography variant="h6" gutterBottom>
               商品管理
+            </Typography>
+            <Typography variant="h6" gutterBottom>
+              ({products ? products.length : '0'})
             </Typography>
           </Stack>
           <Stack direction="row" justifyContent="flex-end" spacing={2}>

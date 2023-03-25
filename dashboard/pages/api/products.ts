@@ -2,7 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 import Product from '@/src/models/product'
-import products from 'samples/products.json'
+import products from '@/src/samples/products.json'
 
 type Data = {
   items: Product[]

@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import * as R from 'ramda'
 
 import Crawler from '@/src/models/crawler'
-import crawlers from 'samples/crawlers.json'
+import crawlers from '@/src/samples/crawlers.json'
 
 type Error = {
   message: string
