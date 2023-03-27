@@ -9,6 +9,8 @@ const analyse = (crawledPost: CrawledPost): Post => {
     userId: crawledPost.userId,
     groupId: crawledPost.groupId,
     postId: crawledPost.postId,
+    postTime: crawledPost.postTime,
+    productLocation: crawledPost.groupName,
   }
   const { message } = crawledPost
   if (!message || message.trim() == '') return post

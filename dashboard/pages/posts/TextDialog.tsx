@@ -1,17 +1,32 @@
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
-
 import Modal from '@mui/material/Modal'
-
 import Typography from '@mui/material/Typography'
+import axios from 'axios'
+import { useEffect, useState } from 'react'
+
+import { isValidHttpUrl } from '@/src/utils/urlUtils'
 
 const TextDialog = (props: {
   open: boolean
-  content: string | undefined
+  contentOrUrl: string | undefined
   handleClose: () => void
 }) => {
-  const { open, content, handleClose } = props
+  const { open, contentOrUrl, handleClose } = props
+  const [content, setContent] = useState<string>()
+
+  useEffect(() => {
+    const loadData = async (url: string) => {
+      const res = await axios.get(url)
+      setContent(res.data)
+    }
+
+    if (contentOrUrl) {
+      if (isValidHttpUrl(contentOrUrl)) loadData(contentOrUrl)
+      else setContent(contentOrUrl)
+    }
+  }, [contentOrUrl])
 
   const style = {
     position: 'absolute',

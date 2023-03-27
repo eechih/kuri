@@ -1,23 +1,18 @@
 type Post = {
   userId: string
-  postId: string
-  postURL: string
-  postMessage?: string
-  postImages: string[]
-  postCreationTime: string // ISO 8601
-  postCrawledTime: string // ISO 8601
   groupId: string
-  groupName: string
+  postId: string
+  postUrl?: string
+  postTime?: string // ISO 8601
   productId?: string
   productName?: string
   productPrice?: number
   productCost?: number
   productOption?: string[][]
   productDescription?: string
-  productImages?: string[]
+  productImageUrls?: string[]
+  productLocation?: string
   productStatusDate?: string // ISO 8601
-  productStatus?: number
-  productPublishUrl?: string
   tags?: string[]
   creationTime: string
 }

@@ -82,7 +82,7 @@ const extractPost = (props: {
     message: story?.message?.text,
     wwwURL: story?.wwwURL,
     photoImages: photoImages,
-    creationTime: moment.unix(creationTime).utcOffset(8).format(),
+    postTime: moment.unix(creationTime).utcOffset(8).format(),
     crawledTime: moment().utcOffset(8).format(),
   }
   return post

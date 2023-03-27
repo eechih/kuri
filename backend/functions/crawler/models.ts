@@ -28,7 +28,7 @@ interface CrawledPost {
   photoImages?: string[]
   groupId: string
   groupName?: string
-  creationTime?: string // ISO 8601
+  postTime?: string // ISO 8601
   crawledTime?: string // ISO 8601
 }
 

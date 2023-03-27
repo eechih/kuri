@@ -65,12 +65,10 @@ export default function PostItem(props: {
       <Grid container spacing={0}>
         <Grid item xs={11}>
           <Stack direction="row" spacing={1} sx={{ m: 1 }}>
-            <Chip size="small" label={post.groupName} />
+            <Chip size="small" label={post.productLocation} />
             <Chip
               size="small"
-              label={moment(post.postCreationTime).format(
-                'yyyy-MM-DD HH:mm:ss'
-              )}
+              label={moment(post.postTime).format('yyyy-MM-DD HH:mm:ss')}
               variant="outlined"
             />
             <Chip
@@ -155,9 +153,9 @@ export default function PostItem(props: {
         <TextAccordion text={product.description ?? ''} />
       </Box>
 
-      {post.productImages && (
+      {post.productImageUrls && (
         <Image
-          src={post.productImages[0]}
+          src={post.productImageUrls[0]}
           alt="Picture of the author"
           width={700}
           height={475}

@@ -18,7 +18,9 @@ export default class Post extends Construct {
   constructor(scope: Construct, id: string) {
     super(scope, id)
 
-    this.bucket = new s3.Bucket(this, 'Bucket')
+    this.bucket = new s3.Bucket(this, 'Bucket', {
+      cors: [{ allowedMethods: [s3.HttpMethods.GET], allowedOrigins: ['*'] }],
+    })
 
     this.bucket.addCorsRule({
       allowedMethods: [s3.HttpMethods.POST],

@@ -191,7 +191,7 @@ export default function Index() {
 
       <TextDialog
         open={!!postToReview}
-        content={postToReview?.postMessage}
+        contentOrUrl={postToReview?.postUrl}
         handleClose={() => setPostToReview(null)}
       />
     </Layout>

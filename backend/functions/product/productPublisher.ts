@@ -426,7 +426,6 @@ type PublishData = Pick<
   | 'description'
   | 'location'
   | 'images'
-  | 'status'
   | 'statusDate'
 >
 
