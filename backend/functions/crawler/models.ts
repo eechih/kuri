@@ -20,7 +20,7 @@ interface Group {
   groupTitle: string
 }
 
-interface Post {
+interface CrawledPost {
   userId: string
   postId: string
   message?: string
@@ -66,4 +66,4 @@ const groups: Group[] = [
   },
 ]
 
-export { Crawler, Group, Post, groups }
+export { Crawler, Group, CrawledPost, groups }

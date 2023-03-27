@@ -1,15 +1,10 @@
 import { SQSEvent } from 'aws-lambda'
 import { Request, Response } from 'express'
-import moment from 'moment'
 import { Patch } from '../libs/baseDao'
 import { nonEmpty, safeParseInt } from '../libs/commomUtils'
 import { sendMessage } from '../libs/sqsClient'
-import {
-  analysePost,
-  downloadImagesAndUploadToS3,
-  parseJsonToPost,
-} from './helper'
-import { Post } from './models'
+import * as helper from './helper'
+import { CrawledPost } from './models'
 import PostDAO from './postDao'
 
 const tableName = process.env.TABLE_NAME || ''
@@ -49,19 +44,7 @@ const getPostHandler = async (req: Request, res: Response) => {
 }
 
 const createPostHandler = async (req: Request, res: Response) => {
-  const post: Post = {
-    userId,
-    postId: moment().valueOf().toString(),
-    postURL: 'string',
-    postMessage: 'string',
-    postImages: ['string'],
-    postCreationTime: 'string', // ISO 8601
-    postCrawledTime: 'string', // ISO 8601
-    groupId: 'string',
-    groupName: 'string',
-  }
-  await postDao.create(post)
-  return res.status(201).json(post)
+  return res.status(405).json('Method Not Allowed')
 }
 
 const updatePostHandler = async (req: Request, res: Response) => {
@@ -113,21 +96,28 @@ const sqsHandler = async (req: Request, res: Response) => {
   event.Records.map(async record => {
     try {
       console.log('Processing:', record.messageId)
-      const post = parseJsonToPost({ jsonString: record.body })
-      const { userId, postId, groupId, postImages } = post
+      const crawledPost = JSON.parse(record.body) as CrawledPost
+      const { userId, groupId, postId, photoImages } = crawledPost
 
       if (await postDao.isExist({ userId, postId })) {
         console.log('The post already exists.')
       } else {
-        const analysedPost = analysePost({ post })
-        analysedPost.productImages = await downloadImagesAndUploadToS3({
+        const post = helper.analysePost({ crawledPost })
+        post.postUrl = await helper.uploadPostMessageToS3({
           bucketName,
           userId,
           groupId,
           postId,
-          postImages,
+          postMessage: crawledPost.message,
         })
-        await postDao.create(analysedPost)
+        post.productImageUrls = await helper.downloadImagesAndUploadToS3({
+          bucketName,
+          userId,
+          groupId,
+          postId,
+          imageUrls: photoImages ?? [],
+        })
+        await postDao.create(post)
       }
     } catch (error) {
       console.error(error)

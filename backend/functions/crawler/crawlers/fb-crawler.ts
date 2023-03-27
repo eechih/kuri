@@ -2,7 +2,7 @@ import moment from 'moment'
 import { scrollPageToBottom } from 'puppeteer-autoscroll-down'
 import { Page } from 'puppeteer-core'
 import { take } from 'ramda'
-import { Post } from '../models'
+import { CrawledPost } from '../models'
 
 export const fbLogin = async (
   page: Page,
@@ -35,7 +35,7 @@ const extractPost = (props: {
   groupId: string
   groupName: string
   json: any
-}): Post | undefined => {
+}): CrawledPost | undefined => {
   console.log('extractPost', props)
   const { userId, groupId, groupName, json } = props
   let node
@@ -74,7 +74,7 @@ const extractPost = (props: {
       }
     )?.story?.creation_time
 
-  const post: Post = {
+  const post: CrawledPost = {
     userId,
     postId: node?.post_id,
     groupId,
@@ -97,10 +97,13 @@ interface CrawlProps {
   crawlLimit?: number
 }
 
-export const crawl = async (page: Page, props: CrawlProps): Promise<Post[]> => {
+export const crawl = async (
+  page: Page,
+  props: CrawlProps
+): Promise<CrawledPost[]> => {
   console.log('Start crawl', props)
   const { userId, groupId, groupName, crawlLimit = 3 } = props
-  const posts: Post[] = []
+  const posts: CrawledPost[] = []
 
   page.on('response', async response => {
     if (response.url().startsWith('https://www.facebook.com/api/graphql/')) {

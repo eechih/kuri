@@ -3,7 +3,7 @@ import { sendMessage } from '../../libs/sqsClient'
 import { createBrowser } from '../../libs/util-puppeteer'
 import { FB_COOKIES } from '../cookies'
 import { findGroupById } from '../helper'
-import { Post } from '../models'
+import { CrawledPost } from '../models'
 import { crawl } from './fb-crawler'
 
 const postQueueUrl = process.env.POST_QUEUE_URL || ''
@@ -26,7 +26,7 @@ export default class FacebookCrawler {
     const page = await browser.newPage()
     await page.setCookie(...FB_COOKIES)
 
-    const posts: Post[] = await crawl(page, {
+    const posts: CrawledPost[] = await crawl(page, {
       userId,
       groupId: group.groupId,
       groupName: group.groupName,

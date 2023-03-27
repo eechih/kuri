@@ -1,23 +1,28 @@
-interface Post {
+interface CrawledPost {
   userId: string
   postId: string
-  postURL: string
-  postMessage?: string
-  postImages: string[]
-  postCreationTime: string // ISO 8601
-  postCrawledTime: string // ISO 8601
+  message?: string
+  wwwURL?: string
+  photoImages?: string[]
   groupId: string
-  groupName: string
+  groupName?: string
+  creationTime?: string // ISO 8601
+  crawledTime?: string // ISO 8601
+}
+
+interface Post {
+  userId: string
+  groupId: string
+  postId: string
+  postUrl?: string
   productName?: string
   productPrice?: number
   productCost?: number
   productOption?: string[][]
   productDescription?: string
-  productImages?: string[]
+  productImageUrls?: string[]
   productStatusDate?: string // ISO 8601
-  productStatus?: number
-  productPublishUrl?: string
   tags?: string[]
 }
 
-export { Post }
+export { CrawledPost, Post }

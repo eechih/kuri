@@ -1,30 +1,43 @@
-import { PutObjectCommand } from '@aws-sdk/client-s3'
+import { PutObjectCommand, PutObjectCommandInput } from '@aws-sdk/client-s3'
 import axios from 'axios'
 import { Md5 } from 'ts-md5'
 import { DEFAULT_REGION } from '../libs'
 import { s3Client } from '../libs/s3Client'
 import { analyse } from './analyser'
-import { Post } from './models'
+import { CrawledPost, Post } from './models'
 
-const parseJsonToPost = (props: { jsonString: string }): Post => {
-  console.log('parseJsonToPost', props)
-  const payload = JSON.parse(props.jsonString)
-  return {
-    userId: payload.userId ?? '',
-    postId: payload.postId ?? '',
-    postURL: payload.wwwURL ?? '',
-    postMessage: payload.message,
-    postImages: payload.photoImages ?? [],
-    postCreationTime: payload.creationTime ?? '',
-    postCrawledTime: payload.crawledTime ?? '',
-    groupId: payload.groupId ?? '',
-    groupName: payload.groupName ?? '',
-  }
+const analysePost = (props: { crawledPost: CrawledPost }): Post => {
+  console.log('analysePost', props)
+  return analyse(props.crawledPost)
 }
 
-const analysePost = (props: { post: Post }): Post => {
-  console.log('analysePost', props)
-  return analyse(props.post)
+const uploadPostMessageToS3 = async (props: {
+  bucketName: string
+  userId: string
+  groupId: string
+  postId: string
+  postMessage?: string
+}): Promise<string | undefined> => {
+  console.log('uploadPostMessageToS3', props)
+  const { bucketName, userId, groupId, postId, postMessage } = props
+  if (postMessage) {
+    try {
+      const input: PutObjectCommandInput = {
+        Bucket: bucketName,
+        Key: `${userId}/${groupId}/${postId}/message.txt`,
+        Body: postMessage,
+        ACL: 'public-read',
+      }
+      await s3Client.send(new PutObjectCommand(input))
+      console.log(`Successfully uploaded object: ${input.Bucket}/${input.Key}`)
+      const href = 'https://s3.' + DEFAULT_REGION + '.amazonaws.com/'
+      const bucketUrl = href + bucketName + '/'
+      return bucketUrl + input.Key
+    } catch (error) {
+      console.log('Upload to S3 failed.', error)
+    }
+  }
+  return undefined
 }
 
 const downloadImagesAndUploadToS3 = async (props: {
@@ -32,12 +45,12 @@ const downloadImagesAndUploadToS3 = async (props: {
   userId: string
   groupId: string
   postId: string
-  postImages: string[]
+  imageUrls: string[]
 }): Promise<string[]> => {
   console.log('downloadImagesAndUploadToS3', props)
-  const { bucketName, userId, groupId, postId, postImages } = props
+  const { bucketName, userId, groupId, postId, imageUrls } = props
   return await Promise.all(
-    postImages.map(async (imageUrl: string) => {
+    imageUrls.map(async (imageUrl: string) => {
       let productImageUrl = ''
       try {
         const response = await axios.get(imageUrl, {
@@ -67,4 +80,4 @@ const downloadImagesAndUploadToS3 = async (props: {
   )
 }
 
-export { analysePost, downloadImagesAndUploadToS3, parseJsonToPost }
+export { analysePost, uploadPostMessageToS3, downloadImagesAndUploadToS3 }

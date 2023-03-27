@@ -1,13 +1,19 @@
 import moment from 'moment'
-import { Post } from './models'
+import { CrawledPost, Post } from './models'
 
 type Article = string[]
 export type AnalyzeResult<T> = { data: T; index: number } | null
 
-const analyse = (post: Post): Post => {
-  if (!post.postMessage || post.postMessage.trim() == '') return post
+const analyse = (crawledPost: CrawledPost): Post => {
+  const post: Post = {
+    userId: crawledPost.userId,
+    groupId: crawledPost.groupId,
+    postId: crawledPost.postId,
+  }
+  const { message } = crawledPost
+  if (!message || message.trim() == '') return post
 
-  const article: Article = post.postMessage.split('\n')?.map(s => s.trim())
+  const article: Article = message.split('\n')?.map(s => s.trim())
   const productName = findProductName(article)
   const cost = findCost(article)
   const price = findPrice(article)
@@ -20,16 +26,14 @@ const analyse = (post: Post): Post => {
     optionIndex: option?.index,
   })
 
-  return {
-    ...post,
-    productName: productName?.data?.trim(),
-    productPrice: price?.data,
-    productCost: cost?.data,
-    productStatusDate: dueDate?.data?.format(),
-    productOption: option?.data,
-    productDescription: productDesc,
-    tags: tags?.data,
-  }
+  post.productName = productName?.data?.trim()
+  post.productPrice = price?.data
+  post.productCost = cost?.data
+  post.productStatusDate = dueDate?.data.format()
+  post.productOption = option?.data
+  post.productDescription = productDesc
+  post.tags = tags?.data
+  return post
 }
 
 interface FindProductDescProps {
