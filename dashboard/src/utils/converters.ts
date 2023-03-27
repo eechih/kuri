@@ -11,10 +11,9 @@ export const convertToProduct = (props: { post: Post }): Product => {
     productCost = 0,
     productDescription = '',
     productOption = [],
-    productImages = [],
+    productImageUrls = [],
+    productLocation = '',
     productStatusDate,
-    productStatus = 0,
-    groupName = '',
   } = post
 
   const name = productId
@@ -44,10 +43,9 @@ export const convertToProduct = (props: { post: Post }): Product => {
     cost: productCost,
     option: productOption,
     description: description,
-    location: groupName,
-    images: productImages,
+    location: productLocation,
+    images: productImageUrls,
     statusDate: statusDate.format('YYYY-MM-DD HH:mm'),
-    status: productStatus,
     creationTime: '',
   }
   return product

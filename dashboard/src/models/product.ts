@@ -9,7 +9,6 @@ type Product = {
   location?: string
   images?: string[]
   statusDate?: string // ISO 8601
-  status?: number
   creationTime: string // ISO 8601
   publishing?: boolean
   publishedProductId?: string // Poduct ID for Buy+1

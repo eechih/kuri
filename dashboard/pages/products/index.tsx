@@ -11,6 +11,7 @@ import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
+import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import axios, { AxiosError, isAxiosError } from 'axios'
 import { compare } from 'fast-json-patch'
@@ -37,6 +38,9 @@ export default function Index() {
   const [checked, setChecked] = useState<string[]>([])
   const [productsToPublish, setProductsToPublish] = useState<Product[] | null>(
     null
+  )
+  const [phpsessId, setPhpsessId] = useState<string>(
+    'hj0rbuamo1i5ojfunkfcoej3k5'
   )
 
   useEffect(() => {
@@ -99,7 +103,7 @@ export default function Index() {
     console.log('publishProduct', productId)
     try {
       await axios.put(`/api/products/${productId}/publish`, undefined, {
-        params: { phpsessId: 'hj0rbuamo1i5ojfunkfcoej3k5' },
+        params: { phpsessId: phpsessId },
         timeout: 60000, // 60 seconds
       })
 
@@ -163,6 +167,15 @@ export default function Index() {
             </Typography>
           </Stack>
           <Stack direction="row" justifyContent="flex-end" spacing={2}>
+            <Box p={1}>
+              <TextField
+                variant="standard"
+                onChange={e => {
+                  setPhpsessId(e.target.value)
+                }}
+                value={phpsessId}
+              />
+            </Box>
             <RefreshIconButton
               onClick={handleRefreshButtonClick}
               loading={loadingState.loading}
@@ -192,7 +205,6 @@ export default function Index() {
             </Button>
           </Stack>
         </Stack>
-
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
           {!products && (
             <Stack
@@ -205,6 +217,7 @@ export default function Index() {
               <CircularProgress size={30} />
             </Stack>
           )}
+
           {products && (
             <TableContainer sx={{ width: '100%', overflowX: 'auto' }}>
               <Table size="small" stickyHeader aria-label="sticky table">
